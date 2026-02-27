@@ -183,11 +183,10 @@ Monitoramento básico configurado via Terminus para:
 ✔ Setup inicial concluído\
 ✔ Prisma configurado\
 ✔ Estrutura base de autenticação criada\
-🔄 Finalização do AuthService e AuthController em andamento
 
 ------------------------------------------------------------------------
 
-## 👩‍💻 Autora
+## 👩‍💻 Autor
 
 Desenvolvido por Poliana Sidere\
-Backend Developer focada em arquitetura limpa e APIs escaláveis.
+Full Stack Developer focada em arquitetura limpa e APIs escaláveis.

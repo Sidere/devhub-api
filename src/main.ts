@@ -17,11 +17,9 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.ENVIRONMENT === 'PROD'
-      ? ['https://devhub.suaempresa.com']
-      : '*',
-    credentials: true,
-  });
+  origin: ['http://localhost:5173', 'http://localhost:3001'],
+  credentials: true,
+});
 
   const config = new DocumentBuilder()
     .setTitle('Dev Hub API')
