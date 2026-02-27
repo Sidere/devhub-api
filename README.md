@@ -62,8 +62,15 @@ organização e boas práticas de desenvolvimento backend.
 
 A aplicação segue arquitetura modular padrão do NestJS:
 
-src/ ├── auth/ ├── users/ ├── logs/ ├── health/ ├── prisma/ ├── common/
-├── app.module.ts └── main.ts
+src/ 
+├── auth/ 
+├── users/ 
+├── logs/ 
+├── health/ 
+├── prisma/ 
+├── common/
+├── app.module.ts 
+└── main.ts
 
 ------------------------------------------------------------------------
 
