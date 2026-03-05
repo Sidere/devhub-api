@@ -17,9 +17,9 @@ async function bootstrap() {
   );
 
   app.enableCors({
-  origin: ['http://localhost:5173', 'http://localhost:3001'],
-  credentials: true,
-});
+    origin: ['http://localhost:8080', 'http://localhost:5173'],
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Dev Hub API')
