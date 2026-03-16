@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { LogsModule } from './logs/logs.module';
 import { LoggingInterceptor } from './logs/interceptors/logging.interceptor';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { LoggingInterceptor } from './logs/interceptors/logging.interceptor';
     AuthModule,
     UsersModule,
     LogsModule,
-    // HealthModule, ← Passo 5
+    HealthModule,
   ],
   providers: [
     {
