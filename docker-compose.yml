@@ -1,0 +1,82 @@
+# docker-compose.yml
+services:
+
+  # ── API NestJS ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: devhub-api
+    user: "0:0"  
+    ports:
+      - "${PORT:-4050}:4050"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-devhub_user}:${POSTGRES_PASSWORD:-coringadevs}@postgres:5432/${POSTGRES_DB:-devhub_db}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+      PORT: 4050
+      ENVIRONMENT: ${ENVIRONMENT:-DEV}
+      EXTERNAL_SERVICE_URL: ${EXTERNAL_SERVICE_URL:-}
+      EXTERNAL_SERVICE_NAME: ${EXTERNAL_SERVICE_NAME:-Serviço Externo}
+    volumes:
+      # Hot-reload: monta o código local dentro do container
+      - .:/app:z
+      # Evita sobrescrever o node_modules do container com o local
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - devhub-network
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: devhub-postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-devhub_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-coringadevs}
+      POSTGRES_DB: ${POSTGRES_DB:-devhub_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devhub_user} -d ${POSTGRES_DB:-devhub_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - devhub-network
+
+  # ── Redis ──────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: devhub-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - devhub-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  devhub-network:
+    driver: bridge
